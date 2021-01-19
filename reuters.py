@@ -55,8 +55,8 @@ history = model.fit(partial_x_train,
 
 history_dict = history.history
 history_dict.keys()
-acc = history_dict['accuracy']
-val_acc = history_dict['val_accuracy']
+acc = history_dict['acc']
+val_acc = history_dict['val_acc']
 loss = history_dict['loss']
 val_loss = history_dict['val_loss']
 

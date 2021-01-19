@@ -5,21 +5,14 @@ train_dir = 'dvc_small/train'
 test_dir = 'dvc_small/test'
 validation_dir = 'dvc_small/validation'
 
-train_datagen = keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
+train_datagen = keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=40,
+                                                             width_shift_range=0.2, height_shift_range=0.2,
+                                                             shear_range=0.2, zoom_range=0.2, horizontal_flip=True,)
 test_datagen = keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
 train_generator = train_datagen.flow_from_directory(train_dir, target_size=(150, 150),
-                                                    batch_size=20, class_mode='binary')
+                                                    batch_size=32, class_mode='binary')
 validation_generator = test_datagen.flow_from_directory(validation_dir, target_size=(150, 150),
-                                                        batch_size=20, class_mode='binary')
-
-# for data_batch, labels_batch in train_generator:
-#     print('data batch shape:', data_batch.shape)
-#     print('labels batch shape', labels_batch.shape)
-#     break
-# for data_batch, labels_batch in test_generator:
-#     print('data batch shape:', data_batch.shape)
-#     print('labels batch shape', labels_batch.shape)
-#     break
+                                                        batch_size=32, class_mode='binary')
 
 model = keras.models.Sequential()
 model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)))
@@ -38,9 +31,9 @@ model.compile(loss='binary_crossentropy',
               optimizer=keras.optimizers.RMSprop(lr=1e-4),
               metrics=['acc'])
 
-history = model.fit_generator(train_generator, steps_per_epoch=100, epochs=30,
+history = model.fit_generator(train_generator, steps_per_epoch=100, epochs=100,
                               validation_data=validation_generator,validation_steps=50)
-model.save('dvc_small.h5')
+model.save('dvc_small_improve.h5')
 
 history_dict = history.history
 history_dict.keys()
