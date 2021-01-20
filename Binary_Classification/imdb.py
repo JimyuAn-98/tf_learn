@@ -44,12 +44,25 @@ partial_x_train = train_data[10000:]
 y_val = train_label[:10000]
 partial_y_train = train_label[10000:]
 
+callbacks = [
+    keras.callbacks.TensorBoard(
+        log_dir='log',
+        histogram_freq=0,
+        write_graph=True,
+        write_images=False,
+        embeddings_freq=0,
+        embeddings_layer_names=None,
+        embeddings_metadata=None,
+    )
+]
+
 history = model.fit(partial_x_train,
                     partial_y_train,
                     epochs=40,
                     batch_size=512,
                     validation_data=(x_val, y_val),
-                    verbose=1)
+                    verbose=1,
+                    callbacks=callbacks)
 
 results = model.evaluate(test_data, test_label, verbose=2)
 print(results)
@@ -70,7 +83,7 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 
-plt.show()
+plt.figure()
 
 plt.clf()   # 清除数字
 
